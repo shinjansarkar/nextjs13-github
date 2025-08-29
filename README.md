@@ -19,8 +19,10 @@ This project is a simple **Next.js 13 application** that is containerized using 
 ```bash
 git clone https://github.com/shinjansarkar/nextjs13-github.git
 cd nextjs13-github
-
+```
+```bash
 2. ## Build the Docker image ##
+```
 ```bash
 docker build -t nextjs13-app .
 
@@ -101,10 +103,10 @@ Now visit: http://localhost:3000
    ```
 
    📦 Repository Links
-
+``` bash 
 GitHub Repo → https://github.com/shinjansarkar/nextjs13-github
 Docker Hub Image  → docker pull shinjan7/github_nextjs:latest
 Vercel Deployment  → https://nextjs13-github-five.vercel.app/
 
-
+```
    
