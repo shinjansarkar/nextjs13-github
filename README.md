@@ -65,7 +65,46 @@ Deploy: App can be deployed via Vercel for live web access.
     push: true
     tags: ${{ secrets.DOCKER_USERNAME }}/nextjs13-app:latest
 ```
+this is the push in the docker hub  
+## You can pull the Docker image directly from Docker Hub and run it: ###
+```bash
+docker pull shinjan7/github_nextjs:latest
 
+docker run -d -p 3000:3000 --name nextjs13-container shinjan7/github_nextjs:latest
+
+```
+```bash
+Now visit: http://localhost:3000
+
+```
+
+🌍 Deployment
+1. Deploy on Vercel Using github action (CD) part
+   ```bash
+    deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Vercel
+        run: vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+
+   ```
+   ```bash
+   check: https://nextjs13-github-five.vercel.app/
+   ```
+
+   📦 Repository Links
+
+GitHub Repo → https://github.com/shinjansarkar/nextjs13-github
+Docker Hub Image  → docker pull shinjan7/github_nextjs:latest
+Vercel Deployment  → https://nextjs13-github-five.vercel.app/
 
 
    
