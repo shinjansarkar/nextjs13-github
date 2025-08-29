@@ -1,4 +1,4 @@
-name: Website Build and Deploy
+name: Website Deploy
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
         run: docker push shinjan7/github_nextjs:latest
 
   # -------------------------------
-  # 2. Deploy to Fly.io
+  # 2. Deploy to Vercel
   # -------------------------------
   deploy:
     runs-on: ubuntu-latest
@@ -39,13 +39,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Fly CLI
-        run: curl -L https://fly.io/install.sh | sh
+      - name: Install Vercel CLI
+        run: npm install -g vercel
 
-      - name: Set Fly CLI path
-        run: echo "$HOME/.fly/bin" >> $GITHUB_PATH
-
-      - name: Deploy to Fly.io
-        run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: Deploy to Vercel
+        run: vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
