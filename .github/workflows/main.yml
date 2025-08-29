@@ -1,9 +1,9 @@
-name: Website Deploy
+name: Website Build and Deploy
 
 on:
   push:
     branches:
-      - main   # Trigger on push to main
+      - main
 
 jobs:
   # -------------------------------
@@ -23,29 +23,29 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: |
-          docker build -t shinjan7/github_nextjs:latest .
+        run: docker build -t shinjan7/github_nextjs:latest .
 
       - name: Push Docker image
-        run: |
-          docker push shinjan7/github_nextjs:latest
+        run: docker push shinjan7/github_nextjs:latest
 
   # -------------------------------
-  # 2. Deploy to AWS EC2
+  # 2. Deploy to Fly.io
   # -------------------------------
   deploy:
     runs-on: ubuntu-latest
-    needs: build   # deploy only after build succeeds
+    needs: build
 
     steps:
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            docker pull shinjan7/github_nextjs:latest
-            docker stop nextjs-container || true
-            docker rm nextjs-container || true
-            docker run -d --name nextjs-container -p 3000:3000 shinjan7/github_nextjs:latest
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Fly CLI
+        run: curl -L https://fly.io/install.sh | sh
+
+      - name: Set Fly CLI path
+        run: echo "$HOME/.fly/bin" >> $GITHUB_PATH
+
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
